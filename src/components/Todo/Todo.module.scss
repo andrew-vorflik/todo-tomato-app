@@ -1,0 +1,42 @@
+@import "~bootstrap/scss/bootstrap";
+
+.todo__done {
+  text-decoration: line-through;
+}
+
+.optionsContainer {
+  display: flex;
+  align-items: center;
+
+  * + * {
+    margin-left: 5px;
+  }
+}
+
+.todo-priority {
+  &-NORMAL {
+    border-color: $secondary;
+    color: $secondary;
+  }
+
+  &-MEDIUM {
+    border-color: $warning;
+    color: $warning;
+  }
+
+  &-HIGH {
+    border-color: $danger;
+    color: $danger;
+  }
+}
+
+.todo-item {
+  position: relative;
+  border-top-width: 1px !important;
+
+  @for $i from 1 through 100 {
+    &:nth-child(#{$i}) {
+      top: -#{$i}px;
+    }
+  }
+}
