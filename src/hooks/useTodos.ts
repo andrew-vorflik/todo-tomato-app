@@ -5,11 +5,10 @@ import { useFirebaseFetch } from "./useFirebaseFetch";
 import { collectionsE, priorityE } from "../types";
 import { onSnapshot, collection } from "@firebase/firestore";
 import { db } from "../firebase-config";
-// import { sortTodos } from "../helpers/sortTodos";
 import { TODOS_DOC } from "../constants";
 
 // make this type global
-export type TodoT = {
+export type TTodo = {
   id: string;
   // index: number;
   title: string;
@@ -17,37 +16,30 @@ export type TodoT = {
   priority: priorityE;
 };
 
-type createTodoT = (title: TodoT["title"]) => void;
-type deleteTodoT = (id: TodoT["id"]) => void;
-type editTodoT = (id: TodoT["id"], title: TodoT["title"]) => void;
-type doneTodoT = (id: TodoT["id"]) => void;
-type changePriorityTodoT = (id: TodoT["id"], priority: priorityE) => void;
-// type changePositionTodoT = (
-//   id: TodoT["id"],
-//   from: TodoT["index"],
-//   to: TodoT["index"]
-// ) => void;
+type createTTodo = (title: TTodo["title"]) => void;
+type deleteTTodo = (id: TTodo["id"]) => void;
+type editTTodo = (id: TTodo["id"], title: TTodo["title"]) => void;
+type doneTTodo = (id: TTodo["id"]) => void;
+type changePriorityTTodo = (id: TTodo["id"], priority: priorityE) => void;
 
 export const useTodos = () => {
-  const [todos, setTodos] = useState<TodoT[]>([]);
+  const [todos, setTodos] = useState<TTodo[]>([]);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
-  const { update } = useFirebase<TodoT>(collectionsE.todos);
-  console.log("todos:", todos);
+  const { update } = useFirebase<TTodo>(collectionsE.todos);
 
-  // const { error: setTodosError, fetch: setTodoFn } = useFirebaseFetch(set);
   const { error: updateTodosError, fetch: fetchUpdateTodo } =
     useFirebaseFetch(update);
 
-  const updateTodosHandler = (todos: TodoT[]) => {
+  const updateTodosHandler = (todos: TTodo[]) => {
     fetchUpdateTodo(TODOS_DOC, { todos });
   };
 
-  const createTodo: createTodoT = (title) => {
+  const createTodo: createTTodo = (title) => {
     if (!title) {
       return;
     }
 
-    const newTodo: TodoT = {
+    const newTodo: TTodo = {
       id: uniqid(),
       title,
       isDone: false,
@@ -57,8 +49,8 @@ export const useTodos = () => {
     updateTodosHandler([...todos, newTodo]);
   };
 
-  const editTodo: editTodoT = (id, title) => {
-    const updatedTodos = todos.map((todo: TodoT) => {
+  const editTodo: editTTodo = (id, title) => {
+    const updatedTodos = todos.map((todo: TTodo) => {
       if (todo.id === id) {
         return { ...todo, title };
       }
@@ -69,8 +61,8 @@ export const useTodos = () => {
     updateTodosHandler(updatedTodos);
   };
 
-  const doneTodo: doneTodoT = (id) => {
-    const updatedTodos = todos.map((todo: TodoT) => {
+  const doneTodo: doneTTodo = (id) => {
+    const updatedTodos = todos.map((todo: TTodo) => {
       if (todo.id === id) {
         return { ...todo, isDone: !todo.isDone };
       }
@@ -81,8 +73,8 @@ export const useTodos = () => {
     updateTodosHandler(updatedTodos);
   };
 
-  const changePriorityTodo: changePriorityTodoT = (id, priority) => {
-    const updatedTodos = todos.map((todo: TodoT) => {
+  const changePriorityTodo: changePriorityTTodo = (id, priority) => {
+    const updatedTodos = todos.map((todo: TTodo) => {
       if (todo.id === id) {
         return { ...todo, priority };
       }
@@ -95,7 +87,6 @@ export const useTodos = () => {
 
   const changePositionTodo = async (result: any) => {
     const { source, destination, draggableId } = result;
-    console.log("draggableId:", draggableId);
 
     if (!destination) {
       return;
@@ -109,10 +100,9 @@ export const useTodos = () => {
     }
 
     const newTodos = [...todos];
-    const draggableTodo: TodoT | undefined = newTodos.find(
+    const draggableTodo: TTodo | undefined = newTodos.find(
       (todo) => todo.id === draggableId
     );
-    console.log("in drag", newTodos);
 
     if (!draggableTodo) {
       return;
@@ -120,14 +110,13 @@ export const useTodos = () => {
 
     newTodos.splice(source.index, 1);
     newTodos.splice(destination.index, 0, draggableTodo!);
-    console.log("newTodos:", newTodos);
 
     setTodos(newTodos); // Optimistic update
     updateTodosHandler(newTodos);
   };
 
-  const deleteTodo: deleteTodoT = (id) => {
-    const updatedTodos = todos.filter((todo: TodoT) => todo.id !== id);
+  const deleteTodo: deleteTTodo = (id) => {
+    const updatedTodos = todos.filter((todo: TTodo) => todo.id !== id);
 
     updateTodosHandler(updatedTodos);
   };

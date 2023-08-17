@@ -1,7 +1,7 @@
 export enum priorityE {
-  HIGH = "HIGH",
-  MEDIUM = "MEDIUM",
   NORMAL = "NORMAL",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
 }
 
 export enum collectionsE {

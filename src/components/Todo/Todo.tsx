@@ -7,10 +7,9 @@ import classes from "./Todo.module.scss";
 import { PriorityDropdown } from "../PriorityDropdown/PriorityDropdown";
 import { priorityE } from "../../types";
 import { Draggable } from "react-beautiful-dnd";
-import { TodoT } from "../../hooks/useTodos";
-// import { PriorityDropdown } from "../PriorityDropdown/PriorityDropdown";
+import { TTodo } from "../../hooks/useTodos";
 
-type TodoPropsT = TodoT & {
+type TodoPropsT = TTodo & {
   onDelete: (id: string) => void;
   onDone: (id: string) => void;
   onEdit: (id: string, title: string) => void;
