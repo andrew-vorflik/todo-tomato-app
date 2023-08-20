@@ -1,19 +1,27 @@
 import { ChangeEvent, useState } from "react";
-import { Container, ListGroup } from "react-bootstrap";
+import { Container, Form, ListGroup } from "react-bootstrap";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { MultiValue, SingleValue } from "react-select";
+import { MultiValue } from "react-select";
 import { Input } from "./components/Input/Input";
 import { Todo } from "./components/Todo/Todo";
 import { priorityE } from "./types";
 import { TTodo, useTodos } from "./hooks/useTodos";
 import { Sort } from "./components/Sort/Sort";
 import { Filter } from "./components/Filter/Filter";
-import { useSortedTodos } from "./hooks/useSorted";
+import { useSearchedFilteredSearchedTodos } from "./hooks/useSearchedFilteredSearchedTodos";
 
 export enum ESortValues {
   ALPHABET = "ALPHABET",
   PRIORITYASCENDING = "PRIORITYASCENDING",
   PRIORITYDESCENDING = "PRIORITYDESCENDING",
+}
+
+export enum EFilterValues {
+  DONE = "DONE",
+  NOT_DONE = "NOT_DONE",
+  HIGH_PRIORITY = "HIGH_PRIORITY",
+  MEDIUM_PRIORITY = "MEDIUM_PRIORITY",
+  NORMAL_PRIORITY = "NORMAL_PRIORITY",
 }
 
 // TODO extract into hook useFilter
@@ -26,9 +34,14 @@ export type TSortOption = {
   value: keyof typeof ESortValues;
 };
 
-export type TOptionState = SingleValue<TOption> | MultiValue<TOption[]> | null;
+export type TFilterOption = {
+  label: string;
+  value: keyof typeof EFilterValues;
+};
+
+// export type TOptionState = SingleValue<TOption> | MultiValue<TOption[]> | null;
 export type TSortState = TSortOption | null;
-export type TFilterState = MultiValue<TOption[]> | null;
+export type TFilterState = MultiValue<TFilterOption[]> | null;
 
 const sortedOptions: TSortState[] = [
   {
@@ -45,18 +58,26 @@ const sortedOptions: TSortState[] = [
   },
 ];
 
-const filterOptions: MultiValue<TOption> = [
+const filterOptions: MultiValue<TFilterOption> = [
   {
-    label: "Alphabet",
-    value: "alphabet",
+    label: "Done",
+    value: EFilterValues.DONE,
   },
   {
-    label: "Priority (Ascending)",
-    value: "priorityAscending",
+    label: "Not done",
+    value: EFilterValues.NOT_DONE,
   },
   {
-    label: "Priority (Descending)",
-    value: "priorityDescending",
+    label: "High priority",
+    value: EFilterValues.HIGH_PRIORITY,
+  },
+  {
+    label: "Medium priority",
+    value: EFilterValues.MEDIUM_PRIORITY,
+  },
+  {
+    label: "Normal priority",
+    value: EFilterValues.NORMAL_PRIORITY,
   },
 ];
 
@@ -66,12 +87,12 @@ function App() {
   //
   const [newTodoTitle, setNewTodoTitle] = useState("");
   const [sort, setSort] = useState<TSortState>(null);
-
   // TODO fix filter and sort types :( !!!!!
-  const [filter, setFilter] = useState<MultiValue<TOption>>([]);
+  const [filters, setFilter] = useState<MultiValue<TFilterOption>>([]);
+  const [search, setSearch] = useState("");
+
   const {
     isLoading,
-    // error,
     todos,
     createTodo,
     editTodo,
@@ -80,7 +101,13 @@ function App() {
     changePriorityTodo,
     changePositionTodo,
   } = useTodos();
-  const sortedTodos = useSortedTodos({ sort: sort?.value || null, todos });
+
+  const filteredSortedSearchedTodos = useSearchedFilteredSearchedTodos({
+    sort,
+    filters,
+    search,
+    todos,
+  });
 
   const onChangeTodoTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTodoTitle(event.target.value);
@@ -106,6 +133,7 @@ function App() {
     doneTodo(id);
   };
 
+  // TODO CHange args on object!!
   const onChangePriority = async (id: string, priority: priorityE) => {
     changePriorityTodo(id, priority);
   };
@@ -122,8 +150,12 @@ function App() {
     setSort(newOption);
   };
 
-  const onChangeFilter = (newOptions: MultiValue<TOption>) => {
+  const onChangeFilter = (newOptions: MultiValue<TFilterOption>) => {
     setFilter(newOptions);
+  };
+
+  const onChangeSearch = (search: string) => {
+    setSearch(search);
   };
 
   return (
@@ -139,10 +171,17 @@ function App() {
         onChange={onChangeSort}
         options={sortedOptions}
       />
-      <Filter<TOption>
-        values={filter}
+      <Filter<TFilterOption>
+        values={filters}
         onChange={onChangeFilter}
         options={filterOptions}
+      />
+      <Form.Control
+        value={search}
+        onChange={(event) => onChangeSearch(event.target.value)}
+        placeholder="Search todo..."
+        className="me-2"
+        type="search"
       />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="todo-droppable">
@@ -155,7 +194,7 @@ function App() {
               {isLoading && <h2>Loading...</h2>}
 
               {/* {!!error && <h2>Ooooops... Something went wrong :( {error}</h2>} */}
-              {sortedTodos.map((todo: TTodo, index: number) => (
+              {filteredSortedSearchedTodos.map((todo: TTodo, index: number) => (
                 <Todo
                   {...todo}
                   key={`${todo.title}-${index}`}

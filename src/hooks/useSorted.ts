@@ -2,10 +2,12 @@ import { ESortValues } from "../App";
 import { priorityWeights } from "../helpers/getPriorityWeights";
 import { TTodo } from "./useTodos";
 
-type TUseSortedTodos = {
+type TUseSortedTodosParams = {
   sort: keyof typeof ESortValues | null;
   todos: TTodo[];
 };
+
+type TUseSortedTodos = (params: TUseSortedTodosParams) => TTodo[];
 
 type TSortFn = (todo1: TTodo, todo2: TTodo) => number;
 
@@ -13,7 +15,7 @@ type TSortMethods = {
   [key in ESortValues]: TSortFn;
 };
 
-export const useSortedTodos = ({ sort, todos }: TUseSortedTodos): TTodo[] => {
+export const useSortedTodos: TUseSortedTodos = ({ sort, todos }) => {
   if (!sort) {
     return todos;
   }
