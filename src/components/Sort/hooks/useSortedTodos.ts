@@ -1,6 +1,6 @@
-import { ESortValues } from "../App";
-import { priorityWeights } from "../helpers/getPriorityWeights";
-import { TTodo } from "./useTodos";
+import { ESortValues } from "../../../enums";
+import { priorityWeights } from "../../../helpers/getPriorityWeights";
+import { TTodo } from "../../../types";
 
 type TUseSortedTodosParams = {
   sort: keyof typeof ESortValues | null;

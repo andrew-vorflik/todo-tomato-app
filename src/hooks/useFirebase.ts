@@ -5,31 +5,43 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  QuerySnapshot,
+  DocumentData,
+  WithFieldValue,
 } from "@firebase/firestore";
 import { db } from "../firebase-config";
 
-export const useFirebase = <T extends { id: string }>(
-  collectionName: string
-) => {
+export type TPromiseFirebase = Promise<
+  QuerySnapshot<DocumentData, DocumentData>
+>;
+export type TGetFirebase = () => TPromiseFirebase;
+export type TSetFirebase = (
+  data: WithFieldValue<DocumentData>
+) => Promise<void>;
+export type TUpdateFirebase = (
+  id: string,
+  data: WithFieldValue<DocumentData>
+) => Promise<void>;
+export type TRemoveFirebase = (id: string) => Promise<void>;
+
+export const useFirebase = (collectionName: string) => {
   const todosCollectionRef = collection(db, collectionName);
 
-  // TODO add crud functions types
-  const get = async () => {
+  const get: TGetFirebase = async () => {
     const data = await getDocs(todosCollectionRef);
-    // const mappedData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     return data;
   };
 
-  const set = async (data: T) => {
+  const set: TSetFirebase = async (data) => {
     await addDoc(collection(db, collectionName), data);
   };
 
-  const update = async (id: string, data: object) => {
+  const update: TUpdateFirebase = async (id, data) => {
     const userDoc = doc(db, collectionName, id);
     await updateDoc(userDoc, data);
   };
 
-  const remove = async (id: string) => {
+  const remove: TRemoveFirebase = async (id: string) => {
     const userDoc = doc(db, collectionName, id);
     deleteDoc(userDoc);
   };

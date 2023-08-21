@@ -5,15 +5,15 @@ import { FiEdit } from "react-icons/fi";
 import { isEnter, isEscape } from "../../helpers/keysVariantes";
 import classes from "./Todo.module.scss";
 import { PriorityDropdown } from "../PriorityDropdown/PriorityDropdown";
-import { priorityE } from "../../types";
 import { Draggable } from "react-beautiful-dnd";
-import { TTodo } from "../../hooks/useTodos";
+import { EPriority } from "../../enums/priority";
+import { TTodo } from "../../types";
 
 type TodoPropsT = TTodo & {
   onDelete: (id: string) => void;
   onDone: (id: string) => void;
   onEdit: (id: string, title: string) => void;
-  onChangePriority: (id: string, priority: priorityE) => void;
+  onChangePriority: (id: string, priority: EPriority) => void;
   index: number;
 };
 
@@ -53,7 +53,7 @@ export const Todo: FC<TodoPropsT> = (props) => {
   };
 
   const onChangePriorityTodo = () => {
-    return (newPriority: priorityE) => onChangePriority(id, newPriority);
+    return (newPriority: EPriority) => onChangePriority(id, newPriority);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

@@ -1,85 +1,28 @@
 import { ChangeEvent, useState } from "react";
-import { Container, Form, ListGroup } from "react-bootstrap";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { Container, ListGroup } from "react-bootstrap";
+import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import { MultiValue } from "react-select";
 import { Input } from "./components/Input/Input";
 import { Todo } from "./components/Todo/Todo";
-import { priorityE } from "./types";
-import { TTodo, useTodos } from "./hooks/useTodos";
+import { useTodos } from "./hooks/useTodos";
+import { useSearchedFilteredSearchedTodos } from "./hooks/useSearchedFilteredSearchedTodos";
+import { EFilterValues, ESortValues } from "./enums";
 import { Sort } from "./components/Sort/Sort";
 import { Filter } from "./components/Filter/Filter";
-import { useSearchedFilteredSearchedTodos } from "./hooks/useSearchedFilteredSearchedTodos";
+import { Search } from "./components/Search/Search";
+import { EPriority } from "./enums/priority";
+import { TOption, TTodo } from "./types";
 
-export enum ESortValues {
-  ALPHABET = "ALPHABET",
-  PRIORITYASCENDING = "PRIORITYASCENDING",
-  PRIORITYDESCENDING = "PRIORITYDESCENDING",
-}
-
-export enum EFilterValues {
-  DONE = "DONE",
-  NOT_DONE = "NOT_DONE",
-  HIGH_PRIORITY = "HIGH_PRIORITY",
-  MEDIUM_PRIORITY = "MEDIUM_PRIORITY",
-  NORMAL_PRIORITY = "NORMAL_PRIORITY",
-}
-
-// TODO extract into hook useFilter
-export type TOption = {
-  label: string;
-  value: string;
-};
-export type TSortOption = {
-  label: string;
-  value: keyof typeof ESortValues;
+export type TSortOption = TOption & {
+  value: ESortValues;
 };
 
-export type TFilterOption = {
-  label: string;
-  value: keyof typeof EFilterValues;
+export type TFilterOption = TOption & {
+  value: EFilterValues;
 };
 
-// export type TOptionState = SingleValue<TOption> | MultiValue<TOption[]> | null;
 export type TSortState = TSortOption | null;
-export type TFilterState = MultiValue<TFilterOption[]> | null;
-
-const sortedOptions: TSortState[] = [
-  {
-    label: "Alphabet",
-    value: ESortValues.ALPHABET,
-  },
-  {
-    label: "Priority (Ascending)",
-    value: ESortValues.PRIORITYASCENDING,
-  },
-  {
-    label: "Priority (Descending)",
-    value: ESortValues.PRIORITYDESCENDING,
-  },
-];
-
-const filterOptions: MultiValue<TFilterOption> = [
-  {
-    label: "Done",
-    value: EFilterValues.DONE,
-  },
-  {
-    label: "Not done",
-    value: EFilterValues.NOT_DONE,
-  },
-  {
-    label: "High priority",
-    value: EFilterValues.HIGH_PRIORITY,
-  },
-  {
-    label: "Medium priority",
-    value: EFilterValues.MEDIUM_PRIORITY,
-  },
-  {
-    label: "Normal priority",
-    value: EFilterValues.NORMAL_PRIORITY,
-  },
-];
+export type TFilterState = MultiValue<TFilterOption>;
 
 function App() {
   //
@@ -87,8 +30,7 @@ function App() {
   //
   const [newTodoTitle, setNewTodoTitle] = useState("");
   const [sort, setSort] = useState<TSortState>(null);
-  // TODO fix filter and sort types :( !!!!!
-  const [filters, setFilter] = useState<MultiValue<TFilterOption>>([]);
+  const [filters, setFilter] = useState<TFilterState>([]);
   const [search, setSearch] = useState("");
 
   const {
@@ -133,29 +75,30 @@ function App() {
     doneTodo(id);
   };
 
-  // TODO CHange args on object!!
-  const onChangePriority = async (id: string, priority: priorityE) => {
+  const onChangePriority = async (id: string, priority: EPriority) => {
     changePriorityTodo(id, priority);
   };
 
   //
-  // Drag'n'Drop
+  // Filters
   //
-  // TODO fix any type
-  const onDragEnd = (result: any) => {
-    changePositionTodo(result);
-  };
-
   const onChangeSort = (newOption: TSortState) => {
     setSort(newOption);
   };
 
-  const onChangeFilter = (newOptions: MultiValue<TFilterOption>) => {
+  const onChangeFilter = (newOptions: TFilterState) => {
     setFilter(newOptions);
   };
 
   const onChangeSearch = (search: string) => {
     setSearch(search);
+  };
+
+  //
+  // Drag'n'Drop
+  //
+  const onDragEnd = (result: DropResult) => {
+    changePositionTodo(result);
   };
 
   return (
@@ -166,23 +109,11 @@ function App() {
         onChange={onChangeTodoTitle}
         onCreateTodo={onCreateTodo}
       />
-      <Sort<TSortState>
-        value={sort}
-        onChange={onChangeSort}
-        options={sortedOptions}
-      />
-      <Filter<TFilterOption>
-        values={filters}
-        onChange={onChangeFilter}
-        options={filterOptions}
-      />
-      <Form.Control
-        value={search}
-        onChange={(event) => onChangeSearch(event.target.value)}
-        placeholder="Search todo..."
-        className="me-2"
-        type="search"
-      />
+
+      <Sort value={sort} onChange={onChangeSort} />
+      <Filter values={filters} onChange={onChangeFilter} />
+      <Search value={search} onChange={onChangeSearch} />
+
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="todo-droppable">
           {(provided) => (

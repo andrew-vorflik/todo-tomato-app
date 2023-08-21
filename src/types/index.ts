@@ -1,9 +1,13 @@
-export enum priorityE {
-  NORMAL = "NORMAL",
-  MEDIUM = "MEDIUM",
-  HIGH = "HIGH",
-}
+import { EPriority } from "../enums/priority";
 
-export enum collectionsE {
-  todos = "todos",
-}
+export type TOption = {
+  label: string;
+  value: string;
+};
+
+export type TTodo = {
+  id: string;
+  title: string;
+  isDone: boolean;
+  priority: EPriority;
+};

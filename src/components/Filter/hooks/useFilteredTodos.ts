@@ -1,27 +1,27 @@
-import { MultiValue } from "react-select";
-import { EFilterValues, TFilterOption } from "../App";
-import { TTodo } from "./useTodos";
-import { getEnumKeys } from "../helpers/getPriorityWeights";
-import { priorityE } from "../types";
+import { EFilterValues } from "../../../enums";
+import { TFilterState } from "../../../App";
+import { EPriority } from "../../../enums/priority";
+import { getEnumKeys } from "../../../helpers/getEnumKeys";
+import { TTodo } from "../../../types";
+
+type TUseFilterParams = {
+  filters: TFilterState;
+  todos: TTodo[];
+};
+
+type TUseFilter = (params: TUseFilterParams) => TTodo[];
 
 type TFilterKeys = keyof typeof EFilterValues;
 
 type TCheckIsFIlterApplied = {
-  [key in EFilterValues]: (filters: MultiValue<TFilterOption>) => boolean;
+  [key in EFilterValues]: (filters: TFilterState) => boolean;
 };
 
 type TFilterTodosFns = {
   [key in EFilterValues]: (todos: TTodo[]) => TTodo[];
 };
 
-type TUseFilterParams = {
-  filters: MultiValue<TFilterOption>;
-  todos: TTodo[];
-};
-
-type TUseFilter = (params: TUseFilterParams) => TTodo[];
-
-export const useFilter: TUseFilter = ({ todos, filters }) => {
+export const useFilteredTodos: TUseFilter = ({ todos, filters }) => {
   if (filters.length === 0) {
     return todos;
   }
@@ -31,7 +31,7 @@ export const useFilter: TUseFilter = ({ todos, filters }) => {
   // Create an object from enum keys with functions which check is filter was applied
   const checkIsFIlterApplied = filterKeys.reduce(
     (obj: TCheckIsFIlterApplied, filterName: TFilterKeys) => {
-      obj[filterName] = (filters: MultiValue<TFilterOption>) => {
+      obj[filterName] = (filters: TFilterState) => {
         const isFilterChose = filters.find(
           (filter) => filter.value === filterName
         );
@@ -52,17 +52,17 @@ export const useFilter: TUseFilter = ({ todos, filters }) => {
       return todos.filter((todo) => !todo.isDone);
     },
     [EFilterValues.HIGH_PRIORITY]: (todos) => {
-      return todos.filter((todo) => todo.priority === priorityE.HIGH);
+      return todos.filter((todo) => todo.priority === EPriority.HIGH);
     },
     [EFilterValues.MEDIUM_PRIORITY]: (todos) => {
-      return todos.filter((todo) => todo.priority === priorityE.MEDIUM);
+      return todos.filter((todo) => todo.priority === EPriority.MEDIUM);
     },
     [EFilterValues.NORMAL_PRIORITY]: (todos) => {
-      return todos.filter((todo) => todo.priority === priorityE.NORMAL);
+      return todos.filter((todo) => todo.priority === EPriority.NORMAL);
     },
   };
 
-  const filterTodos = (filters: MultiValue<TFilterOption>): TTodo[] => {
+  const filterTodos = (filters: TFilterState): TTodo[] => {
     let filteringTodos: TTodo[] = [...todos];
 
     // Go through filters array applying every checked filter

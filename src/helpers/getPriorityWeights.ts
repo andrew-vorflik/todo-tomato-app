@@ -1,18 +1,11 @@
-import { priorityE } from "../types";
+import { EPriority } from "../enums/priority";
+import { getEnumKeys } from "./getEnumKeys";
 
 type TPriorityWeight = {
-  [key in priorityE]: number; // priority keys
+  [key in EPriority]: number;
 };
 
-type TPriorityKeys = keyof typeof priorityE;
-
-// Get array of enum keys
-export const getEnumKeys = <T extends Record<string, string>>(
-  enumObj: T
-): (keyof T)[] => {
-  const keys: (keyof T)[] = Object.keys(enumObj) as (keyof T)[];
-  return keys;
-};
+type TPriorityKeys = keyof typeof EPriority;
 
 // Create an object with keys - priority keys from enum, and their equivalent numeric values
 const createPriorityWeightObj = (
@@ -30,7 +23,7 @@ const createPriorityWeightObj = (
 };
 
 const getPriorityWeights = (): TPriorityWeight => {
-  const priorityValues = getEnumKeys(priorityE);
+  const priorityValues = getEnumKeys(EPriority);
   const priorityWeights = createPriorityWeightObj(priorityValues);
 
   return priorityWeights;

@@ -2,30 +2,23 @@ import { useEffect, useState } from "react";
 import uniqid from "uniqid";
 import { useFirebase } from "./useFirebase";
 import { useFirebaseFetch } from "./useFirebaseFetch";
-import { collectionsE, priorityE } from "../types";
 import { onSnapshot, collection } from "@firebase/firestore";
 import { db } from "../firebase-config";
 import { TODOS_DOC } from "../constants";
-
-// make this type global
-export type TTodo = {
-  id: string;
-  // index: number;
-  title: string;
-  isDone: boolean;
-  priority: priorityE;
-};
+import { EPriority } from "../enums/priority";
+import { ECollections } from "../enums/collections";
+import { TTodo } from "../types";
 
 type createTTodo = (title: TTodo["title"]) => void;
 type deleteTTodo = (id: TTodo["id"]) => void;
 type editTTodo = (id: TTodo["id"], title: TTodo["title"]) => void;
 type doneTTodo = (id: TTodo["id"]) => void;
-type changePriorityTTodo = (id: TTodo["id"], priority: priorityE) => void;
+type changePriorityTTodo = (id: TTodo["id"], priority: EPriority) => void;
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<TTodo[]>([]);
   const [isFirstLoading, setIsFirstLoading] = useState(true);
-  const { update } = useFirebase<TTodo>(collectionsE.todos);
+  const { update } = useFirebase(ECollections.todos);
 
   const { error: updateTodosError, fetch: fetchUpdateTodo } =
     useFirebaseFetch(update);
@@ -43,7 +36,7 @@ export const useTodos = () => {
       id: uniqid(),
       title,
       isDone: false,
-      priority: priorityE.NORMAL,
+      priority: EPriority.NORMAL,
     };
 
     updateTodosHandler([...todos, newTodo]);
@@ -123,7 +116,7 @@ export const useTodos = () => {
 
   const subscribeOnTodoCollection = () => {
     const unsubscribe = onSnapshot(
-      collection(db, collectionsE.todos),
+      collection(db, ECollections.todos),
       (snapshot) => {
         snapshot.docs.forEach((doc) => {
           if (doc.id === TODOS_DOC) {

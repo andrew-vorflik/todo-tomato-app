@@ -1,22 +1,44 @@
-import ReactSelect, {
-  ActionMeta,
-  MultiValue,
-  Options,
-  OnChangeValue,
-} from "react-select";
+import ReactSelect, { ActionMeta, OnChangeValue } from "react-select";
+import { EFilterValues } from "../../enums";
+import { TFilterOption, TFilterState } from "../../App";
 
-type TFilterProps<T> = {
-  values: OnChangeValue<T, true>;
-  onChange: (newValue: MultiValue<T>, actionMeta: ActionMeta<T>) => void;
-  options: Options<T>;
+type TFilterProps = {
+  values: OnChangeValue<TFilterOption, true>;
+  onChange: (
+    newValue: TFilterState,
+    actionMeta: ActionMeta<TFilterOption>
+  ) => void;
 };
 
-export const Filter = <T,>({ values, onChange, options }: TFilterProps<T>) => {
+const filterOptions: TFilterOption[] = [
+  {
+    label: "Done",
+    value: EFilterValues.DONE,
+  },
+  {
+    label: "Not done",
+    value: EFilterValues.NOT_DONE,
+  },
+  {
+    label: "High priority",
+    value: EFilterValues.HIGH_PRIORITY,
+  },
+  {
+    label: "Medium priority",
+    value: EFilterValues.MEDIUM_PRIORITY,
+  },
+  {
+    label: "Normal priority",
+    value: EFilterValues.NORMAL_PRIORITY,
+  },
+];
+
+export const Filter = ({ values, onChange }: TFilterProps) => {
   return (
     <label>
       Filter by:
-      <ReactSelect<T, true>
-        options={options}
+      <ReactSelect<TFilterOption, true>
+        options={filterOptions}
         value={values}
         onChange={onChange}
         isClearable
