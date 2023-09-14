@@ -2,12 +2,12 @@ import React, { FC, useState } from "react";
 import { Button, Form, ListGroup } from "react-bootstrap";
 import { RiDeleteBin4Line } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
-import { isEnter, isEscape } from "../../helpers/keysVariantes";
+import { isEnter, isEscape } from "../../../../utils/helpers/keysVariantes";
 import classes from "./Todo.module.scss";
-import { PriorityDropdown } from "../PriorityDropdown/PriorityDropdown";
+import { PriorityDropdown } from "../../../PriorityDropdown/PriorityDropdown";
 import { Draggable } from "react-beautiful-dnd";
-import { EPriority } from "../../enums/priority";
-import { TTodo } from "../../types";
+import { EPriority } from "../../../../enums/priority";
+import { TTodo } from "../../../../types";
 
 type TodoPropsT = TTodo & {
   onDelete: (id: string) => void;
@@ -17,19 +17,17 @@ type TodoPropsT = TTodo & {
   index: number;
 };
 
-export const Todo: FC<TodoPropsT> = (props) => {
-  const {
-    title,
-    id,
-    isDone,
-    priority,
-    onDelete,
-    onDone,
-    onEdit,
-    onChangePriority,
-    index,
-  } = props;
-
+export const Todo: FC<TodoPropsT> = ({
+  title,
+  id,
+  isDone,
+  priority,
+  onDelete,
+  onDone,
+  onEdit,
+  onChangePriority,
+  index,
+}) => {
   const [isEdit, setIsEdit] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
 

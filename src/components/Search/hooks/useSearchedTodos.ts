@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDebouncedValue } from "../../../hooks/useDebounced";
+import { useDebouncedValue } from "../../../utils/hooks/useDebounced";
 import { TTodo } from "../../../types";
 
 type useSearchParams = {

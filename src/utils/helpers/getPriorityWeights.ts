@@ -1,4 +1,4 @@
-import { EPriority } from "../enums/priority";
+import { EPriority } from "../../enums/priority";
 import { getEnumKeys } from "./getEnumKeys";
 
 type TPriorityWeight = {

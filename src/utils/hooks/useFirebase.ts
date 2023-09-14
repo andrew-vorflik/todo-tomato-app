@@ -9,7 +9,7 @@ import {
   DocumentData,
   WithFieldValue,
 } from "@firebase/firestore";
-import { db } from "../firebase-config";
+import { db } from "../../firebase-config";
 
 export type TPromiseFirebase = Promise<
   QuerySnapshot<DocumentData, DocumentData>

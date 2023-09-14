@@ -1,7 +1,7 @@
 import { EFilterValues } from "../../../enums";
 import { TFilterState } from "../../../App";
 import { EPriority } from "../../../enums/priority";
-import { getEnumKeys } from "../../../helpers/getEnumKeys";
+import { getEnumKeys } from "../../../utils/helpers/getEnumKeys";
 import { TTodo } from "../../../types";
 
 type TUseFilterParams = {

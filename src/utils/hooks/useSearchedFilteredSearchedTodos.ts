@@ -1,8 +1,8 @@
-import { TFilterState, TSortState } from "../App";
-import { useFilteredTodos } from "../components/Filter/hooks/useFilteredTodos";
-import { useSortedTodos } from "../components/Sort/hooks/useSortedTodos";
-import { useSearchedTodos } from "../components/Search/hooks/useSearchedTodos";
-import { TTodo } from "../types";
+import { TFilterState, TSortState } from "../../App";
+import { useFilteredTodos } from "../../components/Filter/hooks/useFilteredTodos";
+import { useSortedTodos } from "../../components/Sort/hooks/useSortedTodos";
+import { useSearchedTodos } from "../../components/Search/hooks/useSearchedTodos";
+import { TTodo } from "../../types";
 
 type TSortedFilteredSearchedParams = {
   sort: TSortState;

@@ -1,13 +1,11 @@
-import ReactSelect, { ActionMeta, SingleValue } from "react-select";
+import ReactSelect from "react-select";
 import { ESortValues } from "../../enums";
 import { TSortState } from "../../App";
+import { TOnSort } from "../../types/handlers";
 
 type TSortProps = {
   value: TSortState;
-  onChange: (
-    newValue: SingleValue<TSortState>,
-    actionMeta: ActionMeta<TSortState>
-  ) => void;
+  onChange: TOnSort;
 };
 
 const sortedOptions: TSortState[] = [

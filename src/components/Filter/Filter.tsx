@@ -1,13 +1,11 @@
-import ReactSelect, { ActionMeta, OnChangeValue } from "react-select";
+import ReactSelect, { OnChangeValue } from "react-select";
 import { EFilterValues } from "../../enums";
-import { TFilterOption, TFilterState } from "../../App";
+import { TFilterOption } from "../../App";
+import { TOnFilter } from "../../types/handlers";
 
 type TFilterProps = {
   values: OnChangeValue<TFilterOption, true>;
-  onChange: (
-    newValue: TFilterState,
-    actionMeta: ActionMeta<TFilterOption>
-  ) => void;
+  onChange: TOnFilter;
 };
 
 const filterOptions: TFilterOption[] = [

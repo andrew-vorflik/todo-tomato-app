@@ -1,9 +1,10 @@
 import React, { FC } from "react";
 import { Form } from "react-bootstrap";
+import { TOnSearch } from "../../types/handlers";
 
 type TSearchProps = {
   value: string;
-  onChange: (value: string) => void;
+  onChange: TOnSearch;
 };
 
 export const Search: FC<TSearchProps> = ({ value, onChange }) => {

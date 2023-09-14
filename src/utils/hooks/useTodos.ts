@@ -3,11 +3,11 @@ import uniqid from "uniqid";
 import { useFirebase } from "./useFirebase";
 import { useFirebaseFetch } from "./useFirebaseFetch";
 import { onSnapshot, collection } from "@firebase/firestore";
-import { db } from "../firebase-config";
-import { TODOS_DOC } from "../constants";
-import { EPriority } from "../enums/priority";
-import { ECollections } from "../enums/collections";
-import { TTodo } from "../types";
+import { db } from "../../firebase-config";
+import { TODOS_DOC } from "../../constants";
+import { EPriority } from "../../enums/priority";
+import { ECollections } from "../../enums/collections";
+import { TTodo } from "../../types";
 
 type createTTodo = (title: TTodo["title"]) => void;
 type deleteTTodo = (id: TTodo["id"]) => void;

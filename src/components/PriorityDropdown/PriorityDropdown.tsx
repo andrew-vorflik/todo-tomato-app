@@ -1,7 +1,7 @@
 import React, { useRef, useState, FC } from "react";
 import classes from "./PriorityDropdown.module.scss";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import { useClickOutside } from "../../utils/hooks/useClickOutside";
 import { EPriority } from "../../enums/priority";
 
 const priorityItems: EPriority[] = Object.values(EPriority);

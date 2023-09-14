@@ -1,5 +1,5 @@
 import { ESortValues } from "../../../enums";
-import { priorityWeights } from "../../../helpers/getPriorityWeights";
+import { priorityWeights } from "../../../utils/helpers/getPriorityWeights";
 import { TTodo } from "../../../types";
 
 type TUseSortedTodosParams = {
