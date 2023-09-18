@@ -1,4 +1,8 @@
-@import "~bootstrap/scss/bootstrap";
+@import "bootstrap/scss/bootstrap";
+
+/* $secondary: "gray";
+$warning: "orange";
+$danger: "red"; */
 
 .todo__done {
   text-decoration: line-through;
@@ -33,10 +37,4 @@
 .todo-item {
   position: relative;
   border-top-width: 1px !important;
-
-  @for $i from 1 through 100 {
-    &:nth-child(#{$i}) {
-      top: -#{$i}px;
-    }
-  }
 }

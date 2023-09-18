@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Sort } from "../Sort/Sort";
 import { Filter } from "../Filter/Filter";
 import { Search } from "../Search/Search";
 import { TFilterState, TSortState } from "../../App";
-import { TOnFilter, TOnSearch, TOnSort } from "../../types/handlers";
+import type { TOnFilter, TOnSearch, TOnSort } from "../../types/handlers";
 
 type TFiltersProps = {
   sort: TSortState;

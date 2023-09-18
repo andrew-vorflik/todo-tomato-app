@@ -1,7 +1,7 @@
 import ReactSelect from "react-select";
 import { ESortValues } from "../../enums";
 import { TSortState } from "../../App";
-import { TOnSort } from "../../types/handlers";
+import type { TOnSort } from "../../types/handlers";
 
 type TSortProps = {
   value: TSortState;

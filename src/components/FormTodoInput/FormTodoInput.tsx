@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { TOnCreateTodo } from "../../types/handlers";
+import type { TOnCreateTodo } from "../../types/handlers";
 
 type FormTodoInputPropsT = {
   onCreateTodo: TOnCreateTodo;

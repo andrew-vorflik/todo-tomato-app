@@ -1,10 +1,10 @@
-import React, { FC } from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { FC } from "react";
 import { ListGroup } from "react-bootstrap";
 import { Todo } from "./Components/Todo/Todo";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 import { TTodo } from "../../types";
-import {
+import type {
   TOnChangePriorityTodo,
   TOnDeleteTodo,
   TOnDoneTodo,

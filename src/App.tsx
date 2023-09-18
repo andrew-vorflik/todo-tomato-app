@@ -5,12 +5,9 @@ import { FormTodoInput } from "./components/FormTodoInput/FormTodoInput";
 import { useTodos } from "./utils/hooks/useTodos";
 import { useSearchedFilteredSearchedTodos } from "./utils/hooks/useSearchedFilteredSearchedTodos";
 import { EFilterValues, ESortValues } from "./enums";
-import { Sort } from "./components/Sort/Sort";
-import { Filter } from "./components/Filter/Filter";
-import { Search } from "./components/Search/Search";
-import { TOption } from "./types";
+import type { TOption } from "./types";
 import { Todos } from "./components/Todos/Todos";
-import {
+import type {
   TOnChangePriorityTodo,
   TOnCreateTodo,
   TOnDeleteTodo,
@@ -104,6 +101,8 @@ function App() {
   const onDrag: TOnDragTodo = (result) => {
     changePositionTodo(result);
   };
+
+  console.log(import.meta.env.VITE_FIREBASE_API_KEY);
 
   return (
     <Container fluid="md">

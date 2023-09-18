@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import uniqid from "uniqid";
+import { v4 as uuid } from "uuid";
 import { useFirebase } from "./useFirebase";
 import { useFirebaseFetch } from "./useFirebaseFetch";
 import { onSnapshot, collection } from "@firebase/firestore";
@@ -33,7 +33,7 @@ export const useTodos = () => {
     }
 
     const newTodo: TTodo = {
-      id: uniqid(),
+      id: uuid(),
       title,
       isDone: false,
       priority: EPriority.NORMAL,

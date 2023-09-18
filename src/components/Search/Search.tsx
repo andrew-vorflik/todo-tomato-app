@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Form } from "react-bootstrap";
-import { TOnSearch } from "../../types/handlers";
+import type { TOnSearch } from "../../types/handlers";
 
 type TSearchProps = {
   value: string;
